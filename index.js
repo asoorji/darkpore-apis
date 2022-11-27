@@ -22,33 +22,27 @@ connectToDb((err) => {
 })
 
 // routes
-app.get('/books', (req, res) => {
-
-  // //  PAGINATION -current page
-  // const page = req.query.p || 0
-  // const booksPerPage = 2
+app.get('/abouts', (req, res) => {
   
-  let books = []
+  let abouts = []
 
-  db.collection('books')
+  db.collection('abouts')
     .find()
     .sort({author: 1})
-    // .skip(page * booksPerPage)
-    // .limit(booksPerPage)
-    .forEach(book => books.push(book))
+    .forEach(about => abouts.push(about))
     .then(() => {
-      res.status(200).json(books)
+      res.status(200).json(abouts)
     })
     .catch(() => {
       res.status(500).json({error: 'Could not fetch the documents'})
     })
 })
 
-app.get('/books/:id', (req, res) => {
+app.get('/abouts/:id', (req, res) => {
 
   if (ObjectId.isValid(req.params.id)) {
 
-    db.collection('books')
+    db.collection('abouts')
       .findOne({_id: new ObjectId(req.params.id)})
       .then(doc => {
         res.status(200).json(doc)
@@ -63,11 +57,11 @@ app.get('/books/:id', (req, res) => {
 
 })
 
-app.post('/books', (req, res) => {
-  const book = req.body
+app.post('/abouts', (req, res) => {
+  const about = req.body
 
-  db.collection('books')
-    .insertOne(book)
+  db.collection('abouts')
+    .insertOne(about)
     .then(result => {
       res.status(201).json(result)
     })
@@ -76,11 +70,11 @@ app.post('/books', (req, res) => {
     })
 })
 
-app.delete('/books/:id', (req, res) => {
+app.delete('/abouts/:id', (req, res) => {
 
   if (ObjectId.isValid(req.params.id)) {
 
-  db.collection('books')
+  db.collection('abouts')
     .deleteOne({ _id: new ObjectId(req.params.id) })
     .then(result => {
       res.status(200).json(result)
@@ -94,12 +88,12 @@ app.delete('/books/:id', (req, res) => {
   }
 })
 
-app.patch('/books/:id', (req, res) => {
+app.patch('/abouts/:id', (req, res) => {
   const updates = req.body
 
   if (ObjectId.isValid(req.params.id)) {
 
-    db.collection('books')
+    db.collection('abouts')
       .updateOne({ _id: new ObjectId(req.params.id) }, {$set: updates})
       .then(result => {
         res.status(200).json(result)
